@@ -1,0 +1,15 @@
+name: Bundle Maven CI
+
+on: [workflow_dispatch, workflow_call, push, pull_request]
+
+jobs:
+  call-workflow:
+    uses: Forsakringskassan/.github/.github/workflows/bundle-maven-ci.yaml@d1349e6aa4ed2c4d3d0c0da328f831472102dee1 # main
+    secrets:
+      PACKAGES_RW_ACTOR: ${{ secrets.PACKAGES_RW_ACTOR }}
+      PACKAGES_RW_TOKEN: ${{ secrets.PACKAGES_RW_TOKEN }}
+
+  validate-config:
+    uses: Forsakringskassan/rimfrost-framework-regel/.github/workflows/validate-config.yaml@791a5cfdc5493656ab9d49cef1dc064cf9739953 # 1.3.2
+    with:
+      framework-ref: '1.2.3'
