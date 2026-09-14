@@ -1,4 +1,4 @@
-package se.fk.github.rtf.manuell.komplettering;
+package se.fk.github.rtf.manuell.komplettering.logic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -18,20 +18,22 @@ import se.fk.rimfrost.framework.handlaggning.model.ImmutableIndividYrkandeRoll;
 import se.fk.rimfrost.framework.handlaggning.model.IndividYrkandeRoll;
 import se.fk.rimfrost.framework.handlaggning.model.Yrkande;
 import se.fk.rimfrost.regel.rtf.manuell.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
-import se.fk.github.rtf.manuell.komplettering.logic.RtfKompletteringService;
 
-class RtfKompletteringServiceTest {
+class RtfKompletteringServiceTest
+{
 
    private static final String PERSONNUMMER_TYP_ID = "personnummer";
 
    private RtfKompletteringService service;
 
    @BeforeEach
-   void setUp() {
+   void setUp()
+   {
       service = new RtfKompletteringService();
    }
 
-   private static IndividYrkandeRoll personnummerRoll(String yrkandeRollId, String varde) {
+   private static IndividYrkandeRoll personnummerRoll(String yrkandeRollId, String varde)
+   {
       return ImmutableIndividYrkandeRoll.builder()
             .individ(ImmutableIdtyp.builder()
                   .typId(PERSONNUMMER_TYP_ID)
@@ -41,7 +43,8 @@ class RtfKompletteringServiceTest {
             .build();
    }
 
-   private static IndividYrkandeRoll otherRoll(String yrkandeRollId) {
+   private static IndividYrkandeRoll otherRoll(String yrkandeRollId)
+   {
       return ImmutableIndividYrkandeRoll.builder()
             .individ(ImmutableIdtyp.builder()
                   .typId("annanTyp")
@@ -51,7 +54,8 @@ class RtfKompletteringServiceTest {
             .build();
    }
 
-   private static Yrkande yrkandeMock(String avsikt, List<IndividYrkandeRoll> roller) {
+   private static Yrkande yrkandeMock(String avsikt, List<IndividYrkandeRoll> roller)
+   {
       Yrkande yrkande = mock(Yrkande.class);
       when(yrkande.id()).thenReturn(UUID.randomUUID());
       when(yrkande.version()).thenReturn(1);
@@ -67,7 +71,8 @@ class RtfKompletteringServiceTest {
       return yrkande;
    }
 
-   private static Handlaggning handlaggningMock(Yrkande yrkande) {
+   private static Handlaggning handlaggningMock(Yrkande yrkande)
+   {
       Handlaggning handlaggning = mock(Handlaggning.class);
       when(handlaggning.id()).thenReturn(UUID.randomUUID());
       when(handlaggning.version()).thenReturn(2);
@@ -79,7 +84,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void isKompletteringRequired_returnsTrue_whenPersonnummerSaknasHelt() {
+   void isKompletteringRequired_returnsTrue_whenPersonnummerSaknasHelt()
+   {
       Yrkande yrkande = yrkandeMock("avsikt", List.of());
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -87,7 +93,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void isKompletteringRequired_returnsTrue_whenPersonnummerVardeArBlankt() {
+   void isKompletteringRequired_returnsTrue_whenPersonnummerVardeArBlankt()
+   {
       Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll("roll-1", "")));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -95,7 +102,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void isKompletteringRequired_returnsTrue_whenAvsiktSaknas() {
+   void isKompletteringRequired_returnsTrue_whenAvsiktSaknas()
+   {
       Yrkande yrkande = yrkandeMock(null, List.of(personnummerRoll("roll-1", "199001011234")));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -103,7 +111,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void isKompletteringRequired_returnsTrue_whenAvsiktArBlank() {
+   void isKompletteringRequired_returnsTrue_whenAvsiktArBlank()
+   {
       Yrkande yrkande = yrkandeMock("", List.of(personnummerRoll("roll-1", "199001011234")));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -111,7 +120,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void isKompletteringRequired_returnsFalse_whenPersonnummerOchAvsiktFinns() {
+   void isKompletteringRequired_returnsFalse_whenPersonnummerOchAvsiktFinns()
+   {
       Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll("roll-1", "199001011234")));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -119,7 +129,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void readSvarData_extraherarPersonnummerOchAvsikt() {
+   void readSvarData_extraherarPersonnummerOchAvsikt()
+   {
       Yrkande yrkande = yrkandeMock("min avsikt", List.of(personnummerRoll("roll-1", "199001011234")));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -130,7 +141,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void readSvarData_returnerarNullPersonnummer_omRollSaknas() {
+   void readSvarData_returnerarNullPersonnummer_omRollSaknas()
+   {
       Yrkande yrkande = yrkandeMock("min avsikt", List.of());
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -141,7 +153,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void registerSvar_uppdaterarBefintligPersonnummerRollMedBehallenRollId() {
+   void registerSvar_uppdaterarBefintligPersonnummerRollMedBehallenRollId()
+   {
       IndividYrkandeRoll befintligRoll = personnummerRoll("befintlig-roll-id", "gammaltVarde");
       IndividYrkandeRoll annanRoll = otherRoll("annan-roll-id");
       Yrkande yrkande = yrkandeMock("gammal avsikt", List.of(befintligRoll, annanRoll));
@@ -181,7 +194,8 @@ class RtfKompletteringServiceTest {
    }
 
    @Test
-   void registerSvar_skaparNyPersonnummerRoll_omIngenFinnsSedanTidigare() {
+   void registerSvar_skaparNyPersonnummerRoll_omIngenFinnsSedanTidigare()
+   {
       Yrkande yrkande = yrkandeMock("gammal avsikt", List.of());
       Handlaggning handlaggning = handlaggningMock(yrkande);
 

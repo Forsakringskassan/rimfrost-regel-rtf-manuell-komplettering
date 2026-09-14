@@ -1,7 +1,6 @@
 package se.fk.github.rtf.manuell.komplettering.logic;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.UUID;
@@ -15,25 +14,28 @@ import se.fk.rimfrost.framework.handlaggning.model.IndividYrkandeRoll;
 import se.fk.rimfrost.framework.regel.komplettering.logic.RegelKompletteringService;
 import se.fk.rimfrost.regel.rtf.manuell.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
 
-@ApplicationScoped 
-public class RtfKompletteringService implements RegelKompletteringService<RtfKompletteringData> {
-    
+@ApplicationScoped
+public class RtfKompletteringService implements RegelKompletteringService<RtfKompletteringData>
+{
+
    @Override
-    public boolean isKompletteringRequired(Handlaggning handlaggning) {
+   public boolean isKompletteringRequired(Handlaggning handlaggning)
+   {
       var yrkande = handlaggning.yrkande();
-      
+
       boolean harPersonnummer = yrkande.individYrkandeRoller().stream()
             .anyMatch(r -> "personnummer".equals(r.individ().typId())
                   && r.individ().varde() != null
                   && !r.individ().varde().isBlank());
 
-      boolean saknarAvsikt = yrkande.avsikt() == null || yrkande.avsikt().isBlank() ;
+      boolean saknarAvsikt = yrkande.avsikt() == null || yrkande.avsikt().isBlank();
 
       return !harPersonnummer || saknarAvsikt;
-    }
+   }
 
-    @Override
-    public RtfKompletteringData readSvarData(Handlaggning handlaggning) {
+   @Override
+   public RtfKompletteringData readSvarData(Handlaggning handlaggning)
+   {
       var yrkande = handlaggning.yrkande();
       var personnummer = yrkande.individYrkandeRoller().stream()
             .filter(r -> "personnummer".equals(r.individ().typId()))
@@ -47,41 +49,42 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
       return data;
    }
 
-    @Override
-    public HandlaggningUpdate registerSvar(Handlaggning handlaggning, RtfKompletteringData request) {
-   var yrkande = handlaggning.yrkande();
+   @Override
+   public HandlaggningUpdate registerSvar(Handlaggning handlaggning, RtfKompletteringData request)
+   {
+      var yrkande = handlaggning.yrkande();
 
-         var existingRollId = yrkande.individYrkandeRoller().stream()
-               .filter(r -> "personnummer".equals(r.individ().typId()))
-               .map(IndividYrkandeRoll::yrkandeRollId)
-               .findFirst()
-               .orElse(UUID.randomUUID().toString());
+      var existingRollId = yrkande.individYrkandeRoller().stream()
+            .filter(r -> "personnummer".equals(r.individ().typId()))
+            .map(IndividYrkandeRoll::yrkandeRollId)
+            .findFirst()
+            .orElse(UUID.randomUUID().toString());
 
-         var updatedRoller = new ArrayList<IndividYrkandeRoll>(
-               yrkande.individYrkandeRoller().stream()
-                     .filter(r -> !"personnummer".equals(r.individ().typId()))
-                     .toList());
+      var updatedRoller = new ArrayList<IndividYrkandeRoll>(
+            yrkande.individYrkandeRoller().stream()
+                  .filter(r -> !"personnummer".equals(r.individ().typId()))
+                  .toList());
 
-         updatedRoller.add(ImmutableIndividYrkandeRoll.builder()
-               .individ(ImmutableIdtyp.builder()
-                     .typId("personnummer")
-                     .varde(request.getPersonnummer())
-                     .build())
-               .yrkandeRollId(existingRollId)
-               .build());
+      updatedRoller.add(ImmutableIndividYrkandeRoll.builder()
+            .individ(ImmutableIdtyp.builder()
+                  .typId("personnummer")
+                  .varde(request.getPersonnummer())
+                  .build())
+            .yrkandeRollId(existingRollId)
+            .build());
 
-         var updatedYrkande = ImmutableYrkande.builder().from(yrkande)
-               .avsikt(request.getAvsikt())
-               .individYrkandeRoller(updatedRoller).build();
+      var updatedYrkande = ImmutableYrkande.builder().from(yrkande)
+            .avsikt(request.getAvsikt())
+            .individYrkandeRoller(updatedRoller).build();
 
-         return ImmutableHandlaggningUpdate.builder()
-               .id(handlaggning.id())
-               .version(handlaggning.version())
-               .yrkande(updatedYrkande)
-               .skapadTS(handlaggning.skapadTS())
-               .avslutadTS(handlaggning.avslutadTS())
-               .handlaggningspecifikationId(handlaggning.handlaggningspecifikationId())
-               .build();
-    }
+      return ImmutableHandlaggningUpdate.builder()
+            .id(handlaggning.id())
+            .version(handlaggning.version())
+            .yrkande(updatedYrkande)
+            .skapadTS(handlaggning.skapadTS())
+            .avslutadTS(handlaggning.avslutadTS())
+            .handlaggningspecifikationId(handlaggning.handlaggningspecifikationId())
+            .build();
+   }
 
 }

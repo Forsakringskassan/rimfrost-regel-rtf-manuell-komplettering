@@ -62,6 +62,11 @@
       <artifactId>rimfrost-regel-rtf-manuell-openapi-jaxrs-spec</artifactId>
       <version>1.2.0</version>
     </dependency>
+    <dependency>
+      <groupId>se.fk.rimfrost.referensdata</groupId>
+      <artifactId>rimfrost-referensdata-erbjudande</artifactId>
+      <version>0.0.3</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
