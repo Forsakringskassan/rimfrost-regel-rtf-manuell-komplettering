@@ -2,6 +2,24 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.0.2 (2026-09-14)
+
+### Bug Fixes
+
+-  added controller for komplettering ([9fac6](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/9fac6bdaf313330) Nils Elveros)  
+-  remvoed unused file ([37599](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/37599177c891f4a) Nils Elveros)  
+-  dependencies, dockerfiles etc ([fb5c5](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/fb5c57fb36b8613) Nils Elveros)  
+-  add KompletteringService and tests ([f8b84](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/f8b84e66f18ad6e) Nils Elveros)  
+
+### Other changes
+
+**Update src/main/java/se/fk/github/rtf/manuell/komplettering/logic/RtfKompletteringService.java**
+
+* Co-authored-by: larpersso &lt;254442132+larpersso@users.noreply.github.com&gt; 
+
+[78290](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/78290140cae1ea6) NilsElveros *2026-09-14 10:54:45*
+
+
 ## 0.0.1 (2026-09-02)
 
 ### Bug Fixes
