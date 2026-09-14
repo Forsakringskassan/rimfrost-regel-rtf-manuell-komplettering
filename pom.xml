@@ -52,6 +52,21 @@
       <version>4.3.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
+      <artifactId>rimfrost-framework-regel-komplettering</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>se.fk.rimfrost.regel.rtf.manuell</groupId>
+      <artifactId>rimfrost-regel-rtf-manuell-openapi-jaxrs-spec</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>se.fk.rimfrost.referensdata</groupId>
+      <artifactId>rimfrost-referensdata-erbjudande</artifactId>
+      <version>0.0.3</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
