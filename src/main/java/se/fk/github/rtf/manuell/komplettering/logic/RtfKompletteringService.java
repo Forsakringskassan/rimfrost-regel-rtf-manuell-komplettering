@@ -70,9 +70,9 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
                .yrkandeRollId(existingRollId)
                .build());
 
-         var updatedYrkande = ImmutableYrkande.copyOf(yrkande)
-               .withAvsikt(request.getAvsikt())
-               .withIndividYrkandeRoller(updatedRoller);
+         var updatedYrkande = ImmutableYrkande.builder().from(yrkande)
+               .avsikt(request.getAvsikt())
+               .individYrkandeRoller(updatedRoller).build();
 
          return ImmutableHandlaggningUpdate.builder()
                .id(handlaggning.id())
