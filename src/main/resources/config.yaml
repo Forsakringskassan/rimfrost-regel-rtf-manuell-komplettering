@@ -2,10 +2,10 @@ uppgift:
   id: 99e959c9-ab62-4a8b-b5f5-655caa0140c8
   version: 1
   path: /regel/rtf-manuell-komplettering
-  aktivitet: "Bedömma rätten till"
+  aktivitet: "Komplettera rtf-manuell"
 
 specifikation:
-  id: a42ffaed-2f20-47e8-8499-f2f79ae2f45f
+  id: a42ffaed-2f20-47e8-8499-f2f79ae2f45g
   version: 1
   namn: "Har kunden rätt till VAH?"
   uppgiftbeskrivning: "Kontrollerar om kunden har varit frånvarande från sitt arbete"
