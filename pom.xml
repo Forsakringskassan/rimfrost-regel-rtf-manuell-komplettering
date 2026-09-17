@@ -55,7 +55,14 @@
     <dependency>
       <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
       <artifactId>rimfrost-framework-regel-komplettering</artifactId>
-      <version>0.0.2</version>
+      <version>0.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
+      <artifactId>rimfrost-framework-regel-komplettering</artifactId>
+      <version>0.1.0</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.regel.rtf.manuell</groupId>
