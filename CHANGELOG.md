@@ -2,6 +2,12 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.0.4 (2026-09-17)
+
+### Bug Fixes
+
+-  Bump rimfrost-framework-regel-komplettering version ([444aa](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/444aad813d5a811) Lars Persson)  
+
 ## 0.0.3 (2026-09-16)
 
 ### Bug Fixes
