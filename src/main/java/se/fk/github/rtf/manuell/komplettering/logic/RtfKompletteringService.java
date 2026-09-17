@@ -12,7 +12,7 @@ import se.fk.rimfrost.framework.handlaggning.model.ImmutableIndividYrkandeRoll;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableYrkande;
 import se.fk.rimfrost.framework.handlaggning.model.IndividYrkandeRoll;
 import se.fk.rimfrost.framework.regel.komplettering.logic.RegelKompletteringService;
-import se.fk.rimfrost.regel.rtf.manuell.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
+import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
 
 @ApplicationScoped
 public class RtfKompletteringService implements RegelKompletteringService<RtfKompletteringData>
