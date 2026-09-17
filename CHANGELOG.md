@@ -2,6 +2,12 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.0.5 (2026-09-17)
+
+### Bug Fixes
+
+-  replace rimfrost-regel-rtf-manuell-openapi with rimfrost-regel-rtf-manuell-komplettering-openapi ([2b39f](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/2b39fe2f58619bc) Ulf Slunga)  
+
 ## 0.0.4 (2026-09-17)
 
 ### Bug Fixes
