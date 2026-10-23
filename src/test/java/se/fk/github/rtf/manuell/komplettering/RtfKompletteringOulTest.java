@@ -1,7 +1,6 @@
 package se.fk.github.rtf.manuell.komplettering;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -33,6 +32,7 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
    @InjectMock
    HandlaggningAdapter handlaggningAdapter;
 
+   // Basklassens fält är paketprivat, så det deklareras igen här. Quarkus injicerar samma mock i båda.
    @InjectMock
    OulUppgiftService oulUppgiftService;
 
@@ -40,7 +40,7 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
    ErbjudandeReferensdata erbjudandeReferensdata;
 
    /**
-    * Handläggning utan personnummer, så att regeln kräver komplettering och skapar en uppgift i OUL.
+    * Handläggning utan personnummer och avsikt, så att regeln kräver komplettering och skapar en uppgift i OUL.
     */
    private Handlaggning handlaggningSomKraverKomplettering()
    {
@@ -49,6 +49,7 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
 
       Mockito.when(yrkande.erbjudandeId()).thenReturn("b1cb6133-11af-4a30-9180-5ea8104a74c7");
       Mockito.when(yrkande.individYrkandeRoller()).thenReturn(List.of());
+      Mockito.when(yrkande.avsikt()).thenReturn(null);
       Mockito.when(handlaggning.yrkande()).thenReturn(yrkande);
       Mockito.when(handlaggning.id()).thenReturn(UUID.randomUUID());
       Mockito.when(handlaggning.version()).thenReturn(1);
@@ -89,13 +90,14 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
       Mockito.when(handlaggningAdapter.readHandlaggning(handlaggningId)).thenReturn(handlaggning);
       Mockito.when(erbjudandeReferensdata.getErbjudandeNamn(Mockito.any())).thenReturn("Vård av husdjur");
 
-      regelKafkaConnector.sendRegelRequest(handlaggningId.toString(), responseTopic);
+      var payload = RegelTestData.newRegelRequestMessagePayload(handlaggningId.toString(), responseTopic);
+      inMemoryConnector.source(RegelKafkaConnector.regelRequestsChannel).send(payload);
 
       var captor = ArgumentCaptor.forClass(OulUppgiftSpec.class);
       verify(oulUppgiftService, timeout(5000)).createOulUppgift(captor.capture());
       var oulUppgiftSpec = captor.getValue();
 
-      assertNotNull(oulUppgiftSpec.aktivitetId());
+      assertEquals(UUID.fromString(payload.getData().getAktivitetId()), oulUppgiftSpec.aktivitetId());
       assertNull(oulUppgiftSpec.processvyUrl());
    }
 }
