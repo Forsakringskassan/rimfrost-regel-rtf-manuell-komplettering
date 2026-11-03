@@ -3,14 +3,17 @@ package se.fk.github.rtf.manuell.komplettering.logic;
 import java.util.ArrayList;
 
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.util.Objects;
 import java.util.UUID;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.HandlaggningUpdate;
+import se.fk.rimfrost.framework.handlaggning.model.ImmutableHandlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableHandlaggningUpdate;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableIdtyp;
-import se.fk.rimfrost.framework.handlaggning.model.ImmutableIndividYrkandeRoll;
+import se.fk.rimfrost.framework.handlaggning.model.ImmutableRollIYrkande;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableYrkande;
-import se.fk.rimfrost.framework.handlaggning.model.IndividYrkandeRoll;
+import se.fk.rimfrost.framework.handlaggning.model.RollIYrkande;
 import se.fk.rimfrost.framework.regel.komplettering.logic.RegelKompletteringService;
 import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
 
@@ -23,7 +26,7 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    {
       var yrkande = handlaggning.yrkande();
 
-      boolean harPersonnummer = yrkande.individYrkandeRoller().stream()
+      boolean harPersonnummer = yrkande.rollerIYrkande().stream()
             .anyMatch(r -> "personnummer".equals(r.individ().typId())
                   && r.individ().varde() != null
                   && !r.individ().varde().isBlank());
@@ -37,7 +40,7 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    public RtfKompletteringData readSvarData(Handlaggning handlaggning)
    {
       var yrkande = handlaggning.yrkande();
-      var personnummer = yrkande.individYrkandeRoller().stream()
+      var personnummer = yrkande.rollerIYrkande().stream()
             .filter(r -> "personnummer".equals(r.individ().typId()))
             .map(r -> r.individ().varde())
             .findFirst()
@@ -54,37 +57,37 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    {
       var yrkande = handlaggning.yrkande();
 
-      var existingRollId = yrkande.individYrkandeRoller().stream()
+      var existingRollId = yrkande.rollerIYrkande().stream()
             .filter(r -> "personnummer".equals(r.individ().typId()))
-            .map(IndividYrkandeRoll::yrkandeRollId)
+            .map(RollIYrkande::yrkandeRollId)
             .findFirst()
             .orElse(UUID.randomUUID().toString());
 
-      var updatedRoller = new ArrayList<IndividYrkandeRoll>(
-            yrkande.individYrkandeRoller().stream()
+      var updatedRoller = new ArrayList<>(
+            yrkande.rollerIYrkande().stream()
                   .filter(r -> !"personnummer".equals(r.individ().typId()))
                   .toList());
 
-      updatedRoller.add(ImmutableIndividYrkandeRoll.builder()
+      updatedRoller.add(ImmutableRollIYrkande.builder()
+            .id(UUID.randomUUID())
             .individ(ImmutableIdtyp.builder()
                   .typId("personnummer")
                   .varde(request.getPersonnummer())
                   .build())
             .yrkandeRollId(existingRollId)
+            .avserYrkande(yrkande.id())
             .build());
 
       var updatedYrkande = ImmutableYrkande.builder().from(yrkande)
+            .version(yrkande.version() + 1)
             .avsikt(request.getAvsikt())
-            .individYrkandeRoller(updatedRoller).build();
+            .rollerIYrkande(updatedRoller).build();
 
-      return ImmutableHandlaggningUpdate.builder()
-            .id(handlaggning.id())
-            .version(handlaggning.version())
+      var updatedHandlaggning = ImmutableHandlaggning.builder().from(handlaggning)
             .yrkande(updatedYrkande)
-            .skapadTS(handlaggning.skapadTS())
-            .avslutadTS(handlaggning.avslutadTS())
-            .handlaggningspecifikationId(handlaggning.handlaggningspecifikationId())
             .build();
+
+      return ImmutableHandlaggningUpdate.builder().handlaggning(updatedHandlaggning).build();
    }
 
 }
