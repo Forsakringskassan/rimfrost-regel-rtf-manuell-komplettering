@@ -56,24 +56,24 @@
     <dependency>
       <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
       <artifactId>rimfrost-framework-regel-komplettering</artifactId>
-      <version>0.1.1</version>
+      <version>0.3.0</version>
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
       <artifactId>rimfrost-framework-regel-komplettering</artifactId>
-      <version>0.1.1</version>
+      <version>0.3.0</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.regel.rtf.manuell.komplettering</groupId>
       <artifactId>rimfrost-regel-rtf-manuell-komplettering-openapi-jaxrs-spec</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.2</version>
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.referensdata</groupId>
       <artifactId>rimfrost-referensdata-erbjudande</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2</version>
     </dependency>
   </dependencies>
   <repositories>

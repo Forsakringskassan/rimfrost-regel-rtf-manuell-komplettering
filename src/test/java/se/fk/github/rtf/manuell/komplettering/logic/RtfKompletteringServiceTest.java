@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.Idtyp;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableIdtyp;
-import se.fk.rimfrost.framework.handlaggning.model.ImmutableIndividYrkandeRoll;
-import se.fk.rimfrost.framework.handlaggning.model.IndividYrkandeRoll;
+import se.fk.rimfrost.framework.handlaggning.model.ImmutableRollIYrkande;
+import se.fk.rimfrost.framework.handlaggning.model.RollIYrkande;
 import se.fk.rimfrost.framework.handlaggning.model.Yrkande;
 import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
 
@@ -32,42 +32,46 @@ class RtfKompletteringServiceTest
       service = new RtfKompletteringService();
    }
 
-   private static IndividYrkandeRoll personnummerRoll(String yrkandeRollId, String varde)
+   private static RollIYrkande personnummerRoll(String yrkandeRollId, String varde)
    {
-      return ImmutableIndividYrkandeRoll.builder()
+      return ImmutableRollIYrkande.builder()
+            .id(UUID.randomUUID())
             .individ(ImmutableIdtyp.builder()
                   .typId(PERSONNUMMER_TYP_ID)
                   .varde(varde)
                   .build())
             .yrkandeRollId(yrkandeRollId)
+            .avserYrkande(UUID.randomUUID())
             .build();
    }
 
-   private static IndividYrkandeRoll otherRoll(String yrkandeRollId)
+   private static RollIYrkande otherRoll(String yrkandeRollId)
    {
-      return ImmutableIndividYrkandeRoll.builder()
+      return ImmutableRollIYrkande.builder()
+            .id(UUID.randomUUID())
             .individ(ImmutableIdtyp.builder()
                   .typId("annanTyp")
                   .varde("annatVarde")
                   .build())
             .yrkandeRollId(yrkandeRollId)
+            .avserYrkande(UUID.randomUUID())
             .build();
    }
 
-   private static Yrkande yrkandeMock(String avsikt, List<IndividYrkandeRoll> roller)
+   private static Yrkande yrkandeMock(String avsikt, List<RollIYrkande> roller)
    {
       Yrkande yrkande = mock(Yrkande.class);
       when(yrkande.id()).thenReturn(UUID.randomUUID());
       when(yrkande.version()).thenReturn(1);
-      when(yrkande.erbjudandeId()).thenReturn("erbjudande-1");
+      when(yrkande.ingangtypId()).thenReturn("erbjudande-1");
       when(yrkande.yrkandeDatum()).thenReturn(OffsetDateTime.now());
       when(yrkande.yrkandeStatus()).thenReturn("PAGAENDE");
       when(yrkande.yrkandeFrom()).thenReturn(OffsetDateTime.now());
       when(yrkande.yrkandeTom()).thenReturn(OffsetDateTime.now().plusDays(1));
       when(yrkande.avsikt()).thenReturn(avsikt);
-      when(yrkande.individYrkandeRoller()).thenReturn(roller);
-      when(yrkande.produceradeResultat()).thenReturn(List.of());
-      when(yrkande.beslut()).thenReturn(null);
+      when(yrkande.rollerIYrkande()).thenReturn(roller);
+      when(yrkande.sakfragorStallningstaganden()).thenReturn(List.of());
+      when(yrkande.beslut()).thenReturn(List.of());
       return yrkande;
    }
 
@@ -80,6 +84,7 @@ class RtfKompletteringServiceTest
       when(handlaggning.skapadTS()).thenReturn(OffsetDateTime.now());
       when(handlaggning.avslutadTS()).thenReturn(null);
       when(handlaggning.handlaggningspecifikationId()).thenReturn(UUID.randomUUID());
+      when(handlaggning.handlaggningIdTyp()).thenReturn(UUID.randomUUID().toString());
       return handlaggning;
    }
 
@@ -155,8 +160,8 @@ class RtfKompletteringServiceTest
    @Test
    void registerSvar_uppdaterarBefintligPersonnummerRollMedBehallenRollId()
    {
-      IndividYrkandeRoll befintligRoll = personnummerRoll("befintlig-roll-id", "gammaltVarde");
-      IndividYrkandeRoll annanRoll = otherRoll("annan-roll-id");
+      RollIYrkande befintligRoll = personnummerRoll("befintlig-roll-id", "gammaltVarde");
+      RollIYrkande annanRoll = otherRoll("annan-roll-id");
       Yrkande yrkande = yrkandeMock("gammal avsikt", List.of(befintligRoll, annanRoll));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
@@ -166,26 +171,26 @@ class RtfKompletteringServiceTest
 
       var update = service.registerSvar(handlaggning, request);
 
-      assertThat(update.id()).isEqualTo(handlaggning.id());
-      assertThat(update.version()).isEqualTo(handlaggning.version());
-      assertThat(update.skapadTS()).isEqualTo(handlaggning.skapadTS());
-      assertThat(update.avslutadTS()).isEqualTo(handlaggning.avslutadTS());
-      assertThat(update.handlaggningspecifikationId()).isEqualTo(handlaggning.handlaggningspecifikationId());
-      assertThat(update.yrkande().avsikt()).isEqualTo("ny avsikt");
+      assertThat(update.handlaggning().id()).isEqualTo(handlaggning.id());
+      assertThat(update.handlaggning().version()).isEqualTo(handlaggning.version());
+      assertThat(update.handlaggning().skapadTS()).isEqualTo(handlaggning.skapadTS());
+      assertThat(update.handlaggning().avslutadTS()).isEqualTo(handlaggning.avslutadTS());
+      assertThat(update.handlaggning().handlaggningspecifikationId()).isEqualTo(handlaggning.handlaggningspecifikationId());
+      assertThat(update.handlaggning().yrkande().avsikt()).isEqualTo("ny avsikt");
 
-      List<IndividYrkandeRoll> resultRoller = update.yrkande().individYrkandeRoller();
+      List<RollIYrkande> resultRoller = update.handlaggning().yrkande().rollerIYrkande();
       assertThat(resultRoller).hasSize(2);
 
       Idtyp uppdateradPersonnummer = resultRoller.stream()
             .filter(r -> PERSONNUMMER_TYP_ID.equals(r.individ().typId()))
             .findFirst()
-            .map(IndividYrkandeRoll::individ)
+            .map(RollIYrkande::individ)
             .orElseThrow();
       assertThat(uppdateradPersonnummer.varde()).isEqualTo("199001011234");
 
       String bevaradRollId = resultRoller.stream()
             .filter(r -> PERSONNUMMER_TYP_ID.equals(r.individ().typId()))
-            .map(IndividYrkandeRoll::yrkandeRollId)
+            .map(RollIYrkande::yrkandeRollId)
             .findFirst()
             .orElseThrow();
       assertThat(bevaradRollId).isEqualTo("befintlig-roll-id");
@@ -205,10 +210,10 @@ class RtfKompletteringServiceTest
 
       var update = service.registerSvar(handlaggning, request);
 
-      List<IndividYrkandeRoll> resultRoller = update.yrkande().individYrkandeRoller();
+      List<RollIYrkande> resultRoller = update.handlaggning().yrkande().rollerIYrkande();
       assertThat(resultRoller).hasSize(1);
 
-      IndividYrkandeRoll nyRoll = resultRoller.get(0);
+      RollIYrkande nyRoll = resultRoller.getFirst();
       assertThat(nyRoll.individ().typId()).isEqualTo(PERSONNUMMER_TYP_ID);
       assertThat(nyRoll.individ().varde()).isEqualTo("199001011234");
       assertThat(UUID.fromString(nyRoll.yrkandeRollId())).isNotNull();
