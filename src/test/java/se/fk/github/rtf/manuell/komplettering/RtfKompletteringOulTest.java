@@ -47,13 +47,12 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
       var yrkande = Mockito.mock(Yrkande.class);
       var handlaggning = Mockito.mock(Handlaggning.class);
 
-      Mockito.when(yrkande.erbjudandeId()).thenReturn("b1cb6133-11af-4a30-9180-5ea8104a74c7");
-      Mockito.when(yrkande.individYrkandeRoller()).thenReturn(List.of());
+      Mockito.when(yrkande.ingangtypId()).thenReturn("b1cb6133-11af-4a30-9180-5ea8104a74c7");
+      Mockito.when(yrkande.rollerIYrkande()).thenReturn(List.of());
       Mockito.when(yrkande.avsikt()).thenReturn(null);
       Mockito.when(handlaggning.yrkande()).thenReturn(yrkande);
       Mockito.when(handlaggning.id()).thenReturn(UUID.randomUUID());
       Mockito.when(handlaggning.version()).thenReturn(1);
-      Mockito.when(handlaggning.processInstansId()).thenReturn(UUID.randomUUID());
       Mockito.when(handlaggning.skapadTS()).thenReturn(OffsetDateTime.now());
       Mockito.when(handlaggning.handlaggningspecifikationId()).thenReturn(UUID.randomUUID());
 
