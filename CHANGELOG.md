@@ -2,6 +2,24 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.0 (2026-11-09)
+
+### Features
+
+-  Bump dependencies ([f7b1d](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/f7b1d7ac480fd19) Lars Persson)  
+
+### Bug Fixes
+
+-  adapt OUL test to framework-regel-komplettering 0.3.0 (FKPOC-1166) ([a844a](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/a844ac3eaa58f5c) LisaWedin_Ductus)  
+-  drop redundant application.config.path in test config (FKPOC-1166) ([a290e](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/a290e894b5b7624) LisaWedin_Ductus)  
+-  address review comments (FKPOC-1166) ([176dc](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/176dc9f4a993337) LisaWedin_Ductus)  
+
+### Dependency updates
+
+- add renovate.json ([674bc](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/674bc82feff609c) renovate[bot])  
+### Other changes
+
+
 ## 0.0.8 (2026-11-03)
 
 ### Bug Fixes
