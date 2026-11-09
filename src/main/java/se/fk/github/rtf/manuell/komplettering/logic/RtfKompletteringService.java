@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.Objects;
 import java.util.UUID;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.HandlaggningUpdate;

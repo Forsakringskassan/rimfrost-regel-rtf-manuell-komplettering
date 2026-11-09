@@ -68,7 +68,7 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
       Mockito.when(handlaggningAdapter.readHandlaggning(handlaggningId)).thenReturn(handlaggning);
       Mockito.when(erbjudandeReferensdata.getErbjudandeNamn(Mockito.any())).thenReturn("Vård av husdjur");
 
-      var payload = RegelTestData.newRegelRequestMessagePayload(handlaggningId.toString(), responseTopic);
+      var payload = RegelTestData.newRegelRequestMessagePayload(handlaggningId.toString());
       payload.getData().setProcessvyUrl("/process/vah");
       inMemoryConnector.source(RegelKafkaConnector.regelRequestsChannel).send(payload);
 
@@ -89,7 +89,7 @@ class RtfKompletteringOulTest extends AbstractRegelKompletteringTestBase
       Mockito.when(handlaggningAdapter.readHandlaggning(handlaggningId)).thenReturn(handlaggning);
       Mockito.when(erbjudandeReferensdata.getErbjudandeNamn(Mockito.any())).thenReturn("Vård av husdjur");
 
-      var payload = RegelTestData.newRegelRequestMessagePayload(handlaggningId.toString(), responseTopic);
+      var payload = RegelTestData.newRegelRequestMessagePayload(handlaggningId.toString());
       inMemoryConnector.source(RegelKafkaConnector.regelRequestsChannel).send(payload);
 
       var captor = ArgumentCaptor.forClass(OulUppgiftSpec.class);
