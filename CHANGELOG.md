@@ -2,6 +2,21 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.1 (2026-11-10)
+
+### Bug Fixes
+
+-  add status notification topic to app.properties ([57ead](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/57ead852f4cd6df) Nils Elveros)  
+
+### Other changes
+
+**Update src/main/resources/application.properties**
+
+* Co-authored-by: larpersso &lt;254442132+larpersso@users.noreply.github.com&gt; 
+
+[514dc](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/514dce989570291) NilsElveros *2026-11-10 13:50:51*
+
+
 ## 0.1.0 (2026-11-09)
 
 ### Features
