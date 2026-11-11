@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
@@ -196,6 +197,48 @@ class RtfKompletteringServiceTest
       assertThat(bevaradRollId).isEqualTo("befintlig-roll-id");
 
       assertThat(resultRoller).anyMatch(r -> "annan-roll-id".equals(r.yrkandeRollId()));
+   }
+
+   @Test
+   @DisplayName("RTFMK-FR-09: getPrenumerationsIdentiteter returnerar tom lista när rollerIYrkande är tom")
+   void getPrenumerationsIdentiteter_returnerarTomLista_narRollerArTomma()
+   {
+      Yrkande yrkande = yrkandeMock("avsikt", List.of());
+      Handlaggning handlaggning = handlaggningMock(yrkande);
+
+      assertThat(service.getPrenumerationsIdentiteter(handlaggning)).isEmpty();
+   }
+
+   @Test
+   @DisplayName("RTFMK-FR-09: getPrenumerationsIdentiteter returnerar personnummer-identiteter inklusive de med tomt värde")
+   void getPrenumerationsIdentiteter_returnerarPersonnummerIdentiteter()
+   {
+      RollIYrkande medVarde = personnummerRoll("roll-1", "199001011234");
+      RollIYrkande tomtVarde = personnummerRoll("roll-2", "");
+      Yrkande yrkande = yrkandeMock("avsikt", List.of(medVarde, tomtVarde));
+      Handlaggning handlaggning = handlaggningMock(yrkande);
+
+      List<Idtyp> result = service.getPrenumerationsIdentiteter(handlaggning);
+
+      assertThat(result).hasSize(2);
+      assertThat(result).extracting(Idtyp::typId).containsOnly(PERSONNUMMER_TYP_ID);
+      assertThat(result).extracting(Idtyp::varde).containsExactlyInAnyOrder("199001011234", "");
+   }
+
+   @Test
+   @DisplayName("RTFMK-FR-09: getPrenumerationsIdentiteter utesluter roller av annan typ")
+   void getPrenumerationsIdentiteter_utesluter_rollerAvAnnanTyp()
+   {
+      RollIYrkande personnummerRoll = personnummerRoll("roll-1", "199001011234");
+      RollIYrkande annanRoll = otherRoll("roll-2");
+      Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll, annanRoll));
+      Handlaggning handlaggning = handlaggningMock(yrkande);
+
+      List<Idtyp> result = service.getPrenumerationsIdentiteter(handlaggning);
+
+      assertThat(result).hasSize(1);
+      assertThat(result.getFirst().typId()).isEqualTo(PERSONNUMMER_TYP_ID);
+      assertThat(result.getFirst().varde()).isEqualTo("199001011234");
    }
 
    @Test

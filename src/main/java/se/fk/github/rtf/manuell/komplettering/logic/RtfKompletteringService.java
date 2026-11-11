@@ -1,12 +1,13 @@
 package se.fk.github.rtf.manuell.komplettering.logic;
 
 import java.util.ArrayList;
-
+import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.HandlaggningUpdate;
+import se.fk.rimfrost.framework.handlaggning.model.Idtyp;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableHandlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableHandlaggningUpdate;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableIdtyp;
@@ -33,6 +34,21 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
       boolean saknarAvsikt = yrkande.avsikt() == null || yrkande.avsikt().isBlank();
 
       return !harPersonnummer || saknarAvsikt;
+   }
+
+   /**
+    * Returns all personnummer identities from the yrkande for identity subscription (RTFMK-FR-09).
+    *
+    * @param handlaggning the current handlaggning
+    * @return personnummer identities to subscribe to
+    */
+   @Override
+   public List<Idtyp> getPrenumerationsIdentiteter(Handlaggning handlaggning)
+   {
+      return handlaggning.yrkande().rollerIYrkande().stream()
+            .filter(r -> "personnummer".equals(r.individ().typId()))
+            .map(RollIYrkande::individ)
+            .toList();
    }
 
    @Override
