@@ -6,9 +6,6 @@ handläggningen kan fortsätta. Om komplettering krävs skapas en uppgift i det
 Operativa Uppgiftslagret (OUL) som en handläggare kan arbeta med. Kompletteringen
 avslutas antingen manuellt av handläggaren eller automatiskt via externa händelser.
 
-Krav som rör det ärvda ramverket (`rimfrost-framework-regel-komplettering`) upprepas
-inte — se dess `docs/krav.md`. Krav för identitetsprenumeration finns i
-`docs/krav-identitet.md` (RTFMK-FR-08, RTFMK-FR-09).
 
 ---
 
@@ -120,6 +117,32 @@ Tjänsten ska exponera en utökad beskrivning av kompletteringsuppgiften.
   ska tjänsten returnera HTTP 403.
 - **RTFMK-FR-07.3** Vid HTTP 403 på grund av SID-kontroll ska tjänsten försöka
   avregistrera handläggaren från OUL-uppgiften.
+
+### RTFMK-FR-08 — Kompletteringskontroll
+
+- **RTFMK-FR-08.1** `isKompletteringRequired()` ska returnera true om yrkandet saknar
+  ett personnummer med ett icke-tomt värde bland `rollerIYrkande`.
+- **RTFMK-FR-08.2** `isKompletteringRequired()` ska returnera true om yrkandets `avsikt`
+  är null eller blank.
+- **RTFMK-FR-08.3** `isKompletteringRequired()` ska returnera false om och endast om
+  ett personnummer med icke-tomt värde finns och `avsikt` är satt.
+
+### RTFMK-FR-09 — Identitetsprenumeration
+
+Regeln prenumererar på förändringar i identitetsdata via ramverkets stöd för
+`identitet-prenumeration-tjänsten` (FRKOMP-FR-10, FRKOMP-FR-11). Ramverket anropar
+`getPrenumerationsIdentiteter()` för att hämta de identiteter som ska bevakas.
+
+- **RTFMK-FR-09.1** `getPrenumerationsIdentiteter()` ska returnera de personnummer-identiteter
+  som finns i `handlaggning.yrkande().rollerIYrkande()`, d.v.s. alla roller där `individ().typId()`
+  är `"personnummer"`, oavsett om värdet är tomt eller saknas. Om inga sådana roller finns ska
+  en tom lista returneras.
+- **RTFMK-FR-09.2** *(ej testbar — konfigurationskrav)* Regeln ska konfigurera property
+  `identitet-prenumeration.api.base-url` med adressen till identitet-prenumeration-tjänsten.
+- **RTFMK-FR-09.3** *(ej testbar — konfigurationskrav)* Regeln ska konfigurera property
+  `identitet-prenumeration.reply-to-topic` med det Kafka-topic dit
+  `IdentitetUppdateradEvent` ska levereras, t.ex.
+  `identitet-uppdaterad-rtf-manuell-komplettering`.
 
 ---
 
