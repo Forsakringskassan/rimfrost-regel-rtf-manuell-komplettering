@@ -1,0 +1,1 @@
+DROP TABLE rtf_manuell_komplettering_process_topic_info;
