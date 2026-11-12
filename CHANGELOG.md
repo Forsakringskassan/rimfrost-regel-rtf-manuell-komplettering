@@ -2,6 +2,18 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.2 (2026-11-12)
+
+### Bug Fixes
+
+-  Narrow catch to JsonProcessingException in harGiltigFolkbokforingData ([86abe](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/86abee1f578a2ad) Ulf Slunga)  
+-  Validate required folkbokforing fields in JSON data ([699bb](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/699bb913a0f0672) Ulf Slunga)  
+-  Require folkbokforing in sakfragorStallningstaganden for komplettering ([553ce](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/553cea7ffe1c0ce) Ulf Slunga)  
+-  Remove redundant mp.messaging.incoming.identitet-uppdaterad.topic property ([5c4d4](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/5c4d4a41ade716c) Ulf Slunga)  
+-  Implement getPrenumerationsIdentiteter and add identitet prenumeration config ([fb38b](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/fb38b3b6fc965f6) Ulf Slunga)  
+-  add implementation plan for FKPOC-1270 and update krav.md ([5ef98](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/5ef982a69c1dd34) Ulf Slunga)  
+-  add reverse-engineered requirements document for existing functionality ([7f257](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/7f257b50d0e5023) Ulf Slunga)  
+
 ## 0.1.1 (2026-11-10)
 
 ### Bug Fixes
