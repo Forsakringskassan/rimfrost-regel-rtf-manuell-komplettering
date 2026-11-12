@@ -1,9 +1,12 @@
 package se.fk.github.rtf.manuell.komplettering.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.util.UUID;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.HandlaggningUpdate;
@@ -20,6 +23,8 @@ import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.gene
 @ApplicationScoped
 public class RtfKompletteringService implements RegelKompletteringService<RtfKompletteringData>
 {
+   @Inject
+   ObjectMapper objectMapper;
 
    @Override
    public boolean isKompletteringRequired(Handlaggning handlaggning)
@@ -33,7 +38,40 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
 
       boolean saknarAvsikt = yrkande.avsikt() == null || yrkande.avsikt().isBlank();
 
-      return !harPersonnummer || saknarAvsikt;
+      boolean saknarFolkbokforing = yrkande.sakfragorStallningstaganden().stream()
+            .filter(s -> "folkbokforing".equals(s.objektTypId()))
+            .noneMatch(s -> harGiltigFolkbokforingData(s.data()));
+
+      return !harPersonnummer || saknarAvsikt || saknarFolkbokforing;
+   }
+
+   /**
+    * Returns true if the JSON data string contains non-blank values for all required
+    * folkbokföring fields: {@code fornamn}, {@code efternamn}, {@code kon},
+    * {@code utdelningsadress}, {@code postnummer}, {@code postort}.
+    */
+   private boolean harGiltigFolkbokforingData(String data)
+   {
+      try
+      {
+         JsonNode node = objectMapper.readTree(data);
+         return isNonBlank(node, "fornamn")
+               && isNonBlank(node, "efternamn")
+               && isNonBlank(node, "kon")
+               && isNonBlank(node, "utdelningsadress")
+               && isNonBlank(node, "postnummer")
+               && isNonBlank(node, "postort");
+      }
+      catch (JsonProcessingException e)
+      {
+         return false;
+      }
+   }
+
+   private static boolean isNonBlank(JsonNode node, String field)
+   {
+      var value = node.path(field).asText(null);
+      return value != null && !value.isBlank();
    }
 
    /**
