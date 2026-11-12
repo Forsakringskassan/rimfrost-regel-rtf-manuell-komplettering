@@ -1,5 +1,6 @@
 package se.fk.github.rtf.manuell.komplettering.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -61,7 +62,7 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
                && isNonBlank(node, "postnummer")
                && isNonBlank(node, "postort");
       }
-      catch (Exception e)
+      catch (JsonProcessingException e)
       {
          return false;
       }
