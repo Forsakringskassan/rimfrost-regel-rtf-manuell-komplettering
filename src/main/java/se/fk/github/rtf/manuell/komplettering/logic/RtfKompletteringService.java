@@ -33,7 +33,10 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
 
       boolean saknarAvsikt = yrkande.avsikt() == null || yrkande.avsikt().isBlank();
 
-      return !harPersonnummer || saknarAvsikt;
+      boolean saknarFolkbokforing = yrkande.sakfragorStallningstaganden().stream()
+            .noneMatch(s -> "folkbokforing".equals(s.objektTypId()));
+
+      return !harPersonnummer || saknarAvsikt || saknarFolkbokforing;
    }
 
    /**

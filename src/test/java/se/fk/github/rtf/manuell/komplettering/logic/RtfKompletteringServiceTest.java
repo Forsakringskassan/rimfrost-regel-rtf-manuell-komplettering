@@ -16,7 +16,9 @@ import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
 import se.fk.rimfrost.framework.handlaggning.model.Idtyp;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableIdtyp;
 import se.fk.rimfrost.framework.handlaggning.model.ImmutableRollIYrkande;
+import se.fk.rimfrost.framework.handlaggning.model.ImmutableSakfragaStallningstagandeContainer;
 import se.fk.rimfrost.framework.handlaggning.model.RollIYrkande;
+import se.fk.rimfrost.framework.handlaggning.model.SakfragaStallningstagandeContainer;
 import se.fk.rimfrost.framework.handlaggning.model.Yrkande;
 import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.generatedsource.model.RtfKompletteringData;
 
@@ -59,7 +61,22 @@ class RtfKompletteringServiceTest
             .build();
    }
 
+   private static SakfragaStallningstagandeContainer folkbokforingContainer()
+   {
+      return ImmutableSakfragaStallningstagandeContainer.builder()
+            .id(UUID.randomUUID())
+            .objektTypId("folkbokforing")
+            .data("{\"utdelningsadress\":\"Testgatan 1\",\"postnummer\":\"12345\",\"postort\":\"Teststaden\"}")
+            .build();
+   }
+
    private static Yrkande yrkandeMock(String avsikt, List<RollIYrkande> roller)
+   {
+      return yrkandeMock(avsikt, roller, List.of());
+   }
+
+   private static Yrkande yrkandeMock(String avsikt, List<RollIYrkande> roller,
+         List<SakfragaStallningstagandeContainer> sakfragor)
    {
       Yrkande yrkande = mock(Yrkande.class);
       when(yrkande.id()).thenReturn(UUID.randomUUID());
@@ -71,7 +88,7 @@ class RtfKompletteringServiceTest
       when(yrkande.yrkandeTom()).thenReturn(OffsetDateTime.now().plusDays(1));
       when(yrkande.avsikt()).thenReturn(avsikt);
       when(yrkande.rollerIYrkande()).thenReturn(roller);
-      when(yrkande.sakfragorStallningstaganden()).thenReturn(List.of());
+      when(yrkande.sakfragorStallningstaganden()).thenReturn(sakfragor);
       when(yrkande.beslut()).thenReturn(List.of());
       return yrkande;
    }
@@ -126,9 +143,21 @@ class RtfKompletteringServiceTest
    }
 
    @Test
-   void isKompletteringRequired_returnsFalse_whenPersonnummerOchAvsiktFinns()
+   @DisplayName("RTFMK-FR-08.4: isKompletteringRequired returnerar true när folkbokföring saknas i sakfragorStallningstaganden")
+   void isKompletteringRequired_returnsTrue_whenFolkbokforingSaknas()
    {
       Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll("roll-1", "199001011234")));
+      Handlaggning handlaggning = handlaggningMock(yrkande);
+
+      assertThat(service.isKompletteringRequired(handlaggning)).isTrue();
+   }
+
+   @Test
+   @DisplayName("RTFMK-FR-08.3: isKompletteringRequired returnerar false när personnummer, avsikt och folkbokföring alla finns")
+   void isKompletteringRequired_returnsFalse_whenPersonnummerAvsiktOchFolkbokforingFinns()
+   {
+      Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll("roll-1", "199001011234")),
+            List.of(folkbokforingContainer()));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
       assertThat(service.isKompletteringRequired(handlaggning)).isFalse();

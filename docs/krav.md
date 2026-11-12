@@ -125,7 +125,11 @@ Tjänsten ska exponera en utökad beskrivning av kompletteringsuppgiften.
 - **RTFMK-FR-08.2** `isKompletteringRequired()` ska returnera true om yrkandets `avsikt`
   är null eller blank.
 - **RTFMK-FR-08.3** `isKompletteringRequired()` ska returnera false om och endast om
-  ett personnummer med icke-tomt värde finns och `avsikt` är satt.
+  ett personnummer med icke-tomt värde finns, `avsikt` är satt, och
+  `sakfragorStallningstaganden` innehåller en post med `objektTypId = "folkbokforing"`.
+- **RTFMK-FR-08.4** `isKompletteringRequired()` ska returnera true om
+  `sakfragorStallningstaganden` saknar en post med `objektTypId = "folkbokforing"`,
+  oavsett om personnummer och avsikt är satta.
 
 ### RTFMK-FR-09 — Identitetsprenumeration
 
