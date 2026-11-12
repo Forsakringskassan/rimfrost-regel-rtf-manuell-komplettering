@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,7 @@ class RtfKompletteringServiceTest
    void setUp()
    {
       service = new RtfKompletteringService();
+      service.objectMapper = new ObjectMapper();
    }
 
    private static RollIYrkande personnummerRoll(String yrkandeRollId, String varde)
@@ -66,7 +68,19 @@ class RtfKompletteringServiceTest
       return ImmutableSakfragaStallningstagandeContainer.builder()
             .id(UUID.randomUUID())
             .objektTypId("folkbokforing")
-            .data("{\"utdelningsadress\":\"Testgatan 1\",\"postnummer\":\"12345\",\"postort\":\"Teststaden\"}")
+            .data("{\"id\":\"fb-test-1\",\"fornamn\":\"Test\",\"efternamn\":\"Testsson\","
+                  + "\"kon\":\"MAN\",\"utdelningsadress\":\"Testgatan 1\","
+                  + "\"postnummer\":\"12345\",\"postort\":\"Teststaden\",\"careOf\":\"\"}")
+            .build();
+   }
+
+   private static SakfragaStallningstagandeContainer folkbokforingContainerOfullstandig()
+   {
+      return ImmutableSakfragaStallningstagandeContainer.builder()
+            .id(UUID.randomUUID())
+            .objektTypId("folkbokforing")
+            .data("{\"id\":\"fb-test-2\",\"utdelningsadress\":\"Testgatan 1\","
+                  + "\"postnummer\":\"12345\",\"postort\":\"Teststaden\",\"careOf\":\"\"}")
             .build();
    }
 
@@ -137,6 +151,17 @@ class RtfKompletteringServiceTest
    void isKompletteringRequired_returnsTrue_whenAvsiktArBlank()
    {
       Yrkande yrkande = yrkandeMock("", List.of(personnummerRoll("roll-1", "199001011234")));
+      Handlaggning handlaggning = handlaggningMock(yrkande);
+
+      assertThat(service.isKompletteringRequired(handlaggning)).isTrue();
+   }
+
+   @Test
+   @DisplayName("RTFMK-FR-08.4: isKompletteringRequired returnerar true när folkbokföring data saknar obligatoriska fält")
+   void isKompletteringRequired_returnsTrue_whenFolkbokforingDataArOfullstandig()
+   {
+      Yrkande yrkande = yrkandeMock("avsikt", List.of(personnummerRoll("roll-1", "199001011234")),
+            List.of(folkbokforingContainerOfullstandig()));
       Handlaggning handlaggning = handlaggningMock(yrkande);
 
       assertThat(service.isKompletteringRequired(handlaggning)).isTrue();
