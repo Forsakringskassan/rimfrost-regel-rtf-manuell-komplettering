@@ -9,4 +9,4 @@ jobs:
       actions: read
       contents: read
       packages: write
-    uses: Forsakringskassan/.github/.github/workflows/bundle-maven-ci.yaml@625efb1a02018d86c0a2ce616074a8c61af97ae9 # main
+    uses: Forsakringskassan/.github/.github/workflows/bundle-maven-ci.yaml@cbc0db833d2d0584b3b0e3b7ed4fd27867b3f6ed # main
