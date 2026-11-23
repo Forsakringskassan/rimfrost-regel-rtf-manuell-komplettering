@@ -2,6 +2,19 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.3 (2026-11-23)
+
+### Bug Fixes
+
+-  Bump dependencies ([0e2cf](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/0e2cf774731017e) Lars Persson)  
+-  Add regelutfall and kommentar columns to common_data table ([9dff8](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/9dff83546e21d64) Lars Persson)  
+-  Add kafka.cancelled.topic to application.properties ([d3325](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/d3325f03cc5d447) Lars Persson)  
+-  Cleanup replyTo leftovers ([44df4](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/44df47e0c068592) Lars Persson)  
+
+### Dependency updates
+
+- update dependency se.fk.rimfrost.framework.regel:rimfrost-framework-regel to v1.6.2 ([2477f](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/2477fa7522b0365) renovate[bot])  
+- update forsakringskassan/.github digest to cbc0db8 ([93c4d](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/93c4dc2f6e1b0ef) renovate[bot])  
 ## 0.1.2 (2026-11-12)
 
 ### Bug Fixes
