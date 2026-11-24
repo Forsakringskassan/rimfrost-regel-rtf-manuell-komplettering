@@ -26,7 +26,7 @@ import se.fk.rimfrost.regel.rtf.manuell.komplettering.jaxrsspec.controllers.gene
 class RtfKompletteringServiceTest
 {
 
-   private static final String PERSONNUMMER_TYP_ID = "personnummer";
+   private static final String PERSONNUMMER_TYP_ID = "c5f2e2b4-9143-4160-8f4b-30c172f0ac05";
 
    private RtfKompletteringService service;
 
@@ -35,6 +35,7 @@ class RtfKompletteringServiceTest
    {
       service = new RtfKompletteringService();
       service.objectMapper = new ObjectMapper();
+      service.personnummerTypId = PERSONNUMMER_TYP_ID;
    }
 
    private static RollIYrkande personnummerRoll(String yrkandeRollId, String varde)

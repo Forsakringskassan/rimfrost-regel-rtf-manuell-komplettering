@@ -139,14 +139,17 @@ Regeln prenumererar på förändringar i identitetsdata via ramverkets stöd fö
 
 - **RTFMK-FR-09.1** `getPrenumerationsIdentiteter()` ska returnera de personnummer-identiteter
   som finns i `handlaggning.yrkande().rollerIYrkande()`, d.v.s. alla roller där `individ().typId()`
-  är `"personnummer"`, oavsett om värdet är tomt eller saknas. Om inga sådana roller finns ska
-  en tom lista returneras.
+  matchar det konfigurerade värdet för `komplettering.personnummer-typ-id`, oavsett om värdet är tomt
+  eller saknas. Om inga sådana roller finns ska en tom lista returneras.
 - **RTFMK-FR-09.2** *(ej testbar — konfigurationskrav)* Regeln ska konfigurera property
   `identitet-prenumeration.api.base-url` med adressen till identitet-prenumeration-tjänsten.
 - **RTFMK-FR-09.3** *(ej testbar — konfigurationskrav)* Regeln ska konfigurera property
   `identitet-prenumeration.reply-to-topic` med det Kafka-topic dit
   `IdentitetUppdateradEvent` ska levereras, t.ex.
   `identitet-uppdaterad-rtf-manuell-komplettering`.
+- **RTFMK-FR-09.4** *(ej testbar — konfigurationskrav)* Regeln ska konfigurera property
+  `komplettering.personnummer-typ-id` med det typId-värde som identifierar personnummer-rollen i
+  `rollerIYrkande`, t.ex. `c5f2e2b4-9143-4160-8f4b-30c172f0ac05`.
 
 ---
 
