@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import java.util.List;
 import java.util.UUID;
 import se.fk.rimfrost.framework.handlaggning.model.Handlaggning;
@@ -26,13 +27,16 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    @Inject
    ObjectMapper objectMapper;
 
+   @ConfigProperty(name = "komplettering.personnummer-typ-id")
+   String personnummerTypId;
+
    @Override
    public boolean isKompletteringRequired(Handlaggning handlaggning)
    {
       var yrkande = handlaggning.yrkande();
 
       boolean harPersonnummer = yrkande.rollerIYrkande().stream()
-            .anyMatch(r -> "personnummer".equals(r.individ().typId())
+            .anyMatch(r -> personnummerTypId.equals(r.individ().typId())
                   && r.individ().varde() != null
                   && !r.individ().varde().isBlank());
 
@@ -84,7 +88,7 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    public List<Idtyp> getPrenumerationsIdentiteter(Handlaggning handlaggning)
    {
       return handlaggning.yrkande().rollerIYrkande().stream()
-            .filter(r -> "personnummer".equals(r.individ().typId()))
+            .filter(r -> personnummerTypId.equals(r.individ().typId()))
             .map(RollIYrkande::individ)
             .toList();
    }
@@ -94,7 +98,7 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
    {
       var yrkande = handlaggning.yrkande();
       var personnummer = yrkande.rollerIYrkande().stream()
-            .filter(r -> "personnummer".equals(r.individ().typId()))
+            .filter(r -> personnummerTypId.equals(r.individ().typId()))
             .map(r -> r.individ().varde())
             .findFirst()
             .orElse(null);
@@ -111,20 +115,20 @@ public class RtfKompletteringService implements RegelKompletteringService<RtfKom
       var yrkande = handlaggning.yrkande();
 
       var existingRollId = yrkande.rollerIYrkande().stream()
-            .filter(r -> "personnummer".equals(r.individ().typId()))
+            .filter(r -> personnummerTypId.equals(r.individ().typId()))
             .map(RollIYrkande::yrkandeRollId)
             .findFirst()
             .orElse(UUID.randomUUID().toString());
 
       var updatedRoller = new ArrayList<>(
             yrkande.rollerIYrkande().stream()
-                  .filter(r -> !"personnummer".equals(r.individ().typId()))
+                  .filter(r -> !personnummerTypId.equals(r.individ().typId()))
                   .toList());
 
       updatedRoller.add(ImmutableRollIYrkande.builder()
             .id(UUID.randomUUID())
             .individ(ImmutableIdtyp.builder()
-                  .typId("personnummer")
+                  .typId(personnummerTypId)
                   .varde(request.getPersonnummer())
                   .build())
             .yrkandeRollId(existingRollId)
