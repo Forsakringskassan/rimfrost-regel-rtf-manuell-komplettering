@@ -2,6 +2,12 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.4 (2026-11-24)
+
+### Bug Fixes
+
+-  make personnummer typId configurable via komplettering.personnummer-typ-id property ([efe65](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/efe65bd8363bc51) Ulf Slunga)  
+
 ## 0.1.3 (2026-11-23)
 
 ### Bug Fixes
