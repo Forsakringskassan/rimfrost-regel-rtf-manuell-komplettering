@@ -2,6 +2,14 @@
 
 Changelog of rimfrost-regel-rtf-manuell-komplettering.
 
+## 0.1.5 (2026-11-25)
+
+### Bug Fixes
+
+-  update config to describe folkbokförd check ([cb5ce](https://github.com/Forsakringskassan/rimfrost-regel-rtf-manuell-komplettering/commit/cb5ce8f66bcffa8) Ulf Slunga)  
+
+## rimfrost-1_3 (2026-11-24)
+
 ## 0.1.4 (2026-11-24)
 
 ### Bug Fixes
