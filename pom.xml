@@ -56,12 +56,12 @@
     <dependency>
       <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
       <artifactId>rimfrost-framework-regel-komplettering</artifactId>
-      <version>0.4.3</version>
+      <version>0.4.4</version>
     </dependency>
     <dependency>
       <groupId>se.fk.rimfrost.framework.regel.komplettering</groupId>
       <artifactId>rimfrost-framework-regel-komplettering</artifactId>
-      <version>0.4.3</version>
+      <version>0.4.4</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
